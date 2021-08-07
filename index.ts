@@ -13,3 +13,15 @@ const colors : Array<string> = [
     "#C51162",
     "#00C853"
 ] 
+const deg : number = Math.PI / 2
+
+class ScaleUtil {
+
+    static maxScale(scale : number, i : number, n : number) : number {
+        return Math.max(0, scale - i / n)
+    }
+
+    static divideScale(scale : number, i : number, n : number) : number {
+        return Math.min(1 / n, ScaleUtil.maxScale(scale, i, n)) * n 
+    }
+}
