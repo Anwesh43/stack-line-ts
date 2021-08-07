@@ -198,3 +198,25 @@ class StackLine {
         this.curr.startUpdating(cb)
     }
 }
+
+class Renderer {
+
+    sl : StackLine = new StackLine()
+    animator : Animator = new Animator()
+
+    render(context : CanvasRenderingContext2D) {
+        this.sl.draw(context)
+    }
+
+    handleTap(cb : Function) {
+        this.sl.startUpdating(() => {
+            this.animator.start(() => {
+                cb()
+                this.sl.update(() => {
+                    this.animator.stop()
+                    cb()
+                })
+            })
+        })
+    }
+}
