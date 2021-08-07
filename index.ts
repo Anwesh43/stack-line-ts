@@ -14,7 +14,7 @@ const colors : Array<string> = [
     "#00C853"
 ] 
 const deg : number = Math.PI / 2
-const strokeFactor : number = 45
+const strokeFactor : number = 60
 
 class ScaleUtil {
 
@@ -38,15 +38,18 @@ class DrawingUtil {
 
     static drawStackLine(context : CanvasRenderingContext2D, scale : number) {
         const size : number = Math.min(w, h) / sizeFactor 
-        const sc1 : number = ScaleUtil.divideScale(scale, 0, parts)
-        const sc2 : number = ScaleUtil.divideScale(scale, 1, parts)
+        const sc1 : number = ScaleUtil.divideScale(scale, 0, 2)
+        const sc2 : number = ScaleUtil.divideScale(scale, 1, 2)
         context.save()
         context.translate(w / 2, h / 2)
         for (let j = 0; j < lines; j++) {
+            const sc1j = ScaleUtil.divideScale(sc1, j, lines)
             context.save()
-            context.translate(size / 2 + (w / 2 + size) * ScaleUtil.divideScale(sc2, parts - 1 - j, parts), -context.lineWidth * j)
-            context.rotate(deg * ScaleUtil.divideScale(sc1, 1, 2))
-            DrawingUtil.drawLine(context, 0, 0, 0, -size * ScaleUtil.divideScale(sc1, 0, 2))
+            context.translate(size / 2 + (w / 2 + size) * ScaleUtil.divideScale(sc2, lines - 1 - j, lines), -context.lineWidth * j)
+            context.rotate(deg * ScaleUtil.divideScale(sc1j, 1, 2))
+            if (sc1j > 0) {
+                DrawingUtil.drawLine(context, 0, 0, 0, -size * ScaleUtil.divideScale(sc1j, 0, 2))
+            }
             context.restore()
         }
         context.restore()
@@ -55,7 +58,7 @@ class DrawingUtil {
     static drawSLNode(context : CanvasRenderingContext2D, i : number, scale : number) {
         context.lineCap = 'round'
         context.lineWidth = Math.min(w, h) / strokeFactor 
-        context.fillStyle = colors[i]
+        context.strokeStyle = colors[i]
         DrawingUtil.drawStackLine(context, scale)
     }
 }
